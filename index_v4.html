@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>그린바이오 첨단분야 혁신융합대학 학점인정신청서</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green-dark:   #1e2d4a;
+    --green-mid:    #2e4880;
+    --green-light:  #edf1f9;
+    --green-accent: #c8a84b;
+    --gray-100:     #f8f8f7;
+    --gray-200:     #ebebea;
+    --gray-400:     #9c9c99;
+    --gray-700:     #404040;
+    --text:         #1a1a1a;
+    --border:       #d4d4d0;
+  }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--gray-100);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  /* ─── 페이지 래퍼 ─── */
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* ─── 헤더 ─── */
+  .header {
+    background: var(--green-dark);
+    padding: 2rem 1.8rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .header-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: #c8a84b;
+    border: 1px solid #c8a84b;
+    border-radius: 2px;
+    padding: 2px 8px;
+    margin-bottom: 0.8rem;
+  }
+  .header h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.5);
+    margin-top: 0.5rem;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .logo-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #c8a84b;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-dot svg { width: 16px; height: 16px; fill: #fff; }
+  .logo-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── 섹션 공통 ─── */
+  .section {
+    padding: 1.8rem 1.8rem;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .section:last-child { border-bottom: none; }
+
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-mid);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gray-200);
+  }
+
+  /* ─── 기본정보 그리드 ─── */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .info-grid .span2 { grid-column: span 2; }
+
+  .field { display: flex; flex-direction: column; gap: 0.35rem; }
+  .field label {
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--gray-400);
+    letter-spacing: 0.04em;
+  }
+  .field input, .field select {
+    height: 40px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text);
+    background: var(--gray-100);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+    line-height: 40px;
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--green-mid);
+    background: #fff;
+  }
+  .field input::placeholder { color: var(--gray-400); font-size: 0.83rem; }
+  .field select option[value=""] { color: var(--gray-400); }
+  .field select:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  /* ─── 이수사항 테이블 ─── */
+  .edu-table-wrap { width: 100%; }
+  .edu-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; table-layout: fixed; }
+  .edu-table thead th {
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 600;
+    font-size: 0.73rem;
+    letter-spacing: 0.03em;
+    padding: 0.5rem 0.6rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .edu-table tbody tr { background: #fff; }
+  .edu-table tbody tr:nth-child(even) { background: var(--gray-100); }
+  .edu-table tbody td {
+    border: 1px solid var(--gray-200);
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 0;
+  }
+  .row-num {
+    text-align: center;
+    font-size: 0.73rem;
+    color: var(--gray-400);
+    font-weight: 500;
+    width: 28px;
+  }
+  .edu-table td input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--text);
+    padding: 0.3rem 0;
+    outline: none;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .edu-table td input:focus {
+    background: #f0f9f4;
+    border-radius: 3px;
+  }
+  .edu-table td input.grade-input { width: 100%; }
+  .period-input {
+    width: 100%;
+    min-width: 0;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.75rem;
+    color: var(--text);
+    padding: 0.3rem 0;
+    outline: none;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .period-input:focus { background: #f0f9f4; border-radius: 3px; }
+  .period-input::placeholder { color: var(--gray-400); font-size: 0.7rem; }
+
+  .del-row-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    border: none;
+    background: none;
+    color: var(--gray-400);
+    font-size: 0.75rem;
+    cursor: pointer;
+    border-radius: 4px;
+    margin: auto;
+    transition: background 0.12s, color 0.12s;
+  }
+  .del-row-btn:hover { background: #fde8e8; color: #c0392b; }
+  .td-select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.8rem;
+    color: var(--text);
+    padding: 0.3rem 0.2rem;
+    outline: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .td-select:focus { background: #f0f9f4; border-radius: 3px; }
+  .auto-univ, .auto-credits {
+    background: var(--gray-100) !important;
+    color: var(--gray-700) !important;
+    font-size: 0.75rem;
+    cursor: default;
+    width: 100% !important;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0.3rem 0 !important;
+  }
+  .add-row-btn {
+    margin-top: 0.7rem;
+    font-size: 0.8rem;
+    color: var(--green-mid);
+    background: none;
+    border: 1px dashed var(--green-accent);
+    border-radius: 4px;
+    padding: 0.4rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: background 0.15s;
+  }
+  .add-row-btn:hover { background: var(--green-light); }
+
+  .lookup-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--green-dark);
+    background: var(--green-light);
+    border: 1px solid var(--green-accent);
+    border-radius: 5px;
+    padding: 0.38rem 0.85rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .lookup-btn:hover { background: var(--green-mid); color: #fff; }
+
+  /* ─── 동의서 ─── */
+  .consent-box {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    padding: 1rem;
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--gray-700);
+    word-break: keep-all;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .consent-box table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin: 0.8rem 0;
+  }
+  .consent-box table th {
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-weight: 600;
+    padding: 0.5rem 0.4rem;
+    border: 1px solid var(--border);
+    text-align: center;
+    font-size: 0.75rem;
+    white-space: normal;
+    word-break: keep-all;
+    line-height: 1.4;
+  }
+  .consent-box table td {
+    border: 1px solid var(--gray-200);
+    padding: 0.45rem 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: normal;
+    word-break: keep-all;
+  }
+  .consent-note {
+    font-size: 0.75rem;
+    color: var(--gray-400);
+    margin-top: 0.5rem;
+    word-break: keep-all;
+    text-align: justify;
+    padding-left: 1.6em;
+    text-indent: -1.6em;
+  }
+  .consent-check {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+  .consent-check label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .consent-check input[type=radio] { accent-color: var(--green-mid); width: 16px; height: 16px; }
+
+  /* ─── 서약문 ─── */
+  .pledge-text {
+    font-size: 0.9rem;
+    line-height: 1.9;
+    color: var(--gray-700);
+    padding: 0.5rem 0;
+  }
+  .date-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .date-row input[type=number] {
+    width: 60px; height: 34px;
+    text-align: center;
+    border: none;
+    border-bottom: 1.5px solid var(--border);
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    color: var(--text);
+  }
+  .date-row input[type=number]:focus { border-bottom-color: var(--green-mid); }
+
+  /* ─── 전자서명 ─── */
+  .sig-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .sig-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .sig-hint { font-size: 0.76rem; color: var(--gray-400); }
+  .sig-canvas-wrap {
+    position: relative;
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    background: #fafafa;
+    overflow: hidden;
+  }
+  .sig-canvas-wrap canvas {
+    display: block;
+    width: 100%;
+    cursor: crosshair;
+    touch-action: none;
+  }
+  .sig-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0.25;
+    font-size: 0.85rem;
+    color: var(--gray-700);
+    letter-spacing: 0.1em;
+  }
+  .sig-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.3rem;
+  }
+  .sig-status { font-size: 0.76rem; color: var(--green-mid); font-weight: 500; min-height: 1.1rem; }
+  .btn-clear-sig {
+    font-size: 0.78rem;
+    color: var(--gray-400);
+    background: none;
+    border: 1px solid var(--gray-200);
+    border-radius: 4px;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-clear-sig:hover { border-color: var(--border); color: var(--gray-700); }
+
+  /* 서약서 - 신청인+서명 가로 배치 */
+  .pledge-sig-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+  }
+  .pledge-name-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-width: 90px;
+    padding: 0.8rem 0.6rem;
+    border: 1px solid var(--gray-200);
+    border-radius: 6px;
+    background: var(--gray-100);
+    align-self: stretch;
+  }
+  .pledge-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gray-400);
+    letter-spacing: 0.06em;
+  }
+  .pledge-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    text-align: center;
+    word-break: keep-all;
+  }
+  @media (max-width: 480px) {
+    .pledge-sig-row { flex-direction: column; }
+    .pledge-name-block { flex-direction: row; min-width: unset; width: 100%; justify-content: center; }
+  }
+
+  /* ─── 유의사항 ─── */
+  .notice-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+  .notice-list li {
+    font-size: 0.76rem;
+    color: var(--gray-700);
+    line-height: 1.55;
+    padding-left: 1.1rem;
+    position: relative;
+    word-break: keep-all;
+  }
+  .notice-list li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0;
+    font-weight: 600;
+    color: var(--green-mid);
+    font-size: 0.78rem;
+  }
+  .notice-list li strong { color: var(--green-dark); font-weight: 600; }
+  .notice-sub {
+    font-size: 0.73rem;
+    color: var(--gray-400);
+    padding-left: 0;
+    margin-top: 0.2rem;
+    word-break: keep-all;
+  }
+
+  /* ─── 제출 버튼 ─── */
+  .submit-section {
+    padding: 1.5rem 1.8rem 2rem;
+    background: var(--gray-100);
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .btn-submit {
+    width: 100%;
+    max-width: 320px;
+    height: 50px;
+    background: var(--green-dark);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn-submit:hover { background: var(--green-mid); }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; }
+
+  .status-msg {
+    font-size: 0.85rem;
+    text-align: center;
+    min-height: 1.3rem;
+    font-weight: 500;
+  }
+  .status-msg.success { color: var(--green-mid); }
+  .status-msg.error   { color: #c0392b; }
+
+  /* ─── 모바일 ─── */
+  @media (max-width: 600px) {
+    .section { padding: 1.4rem 1.2rem; }
+    .header  { padding: 1.5rem 1.2rem; }
+    .header h1 { font-size: 1.4rem; }
+    .info-grid { grid-template-columns: 1fr; }
+    .info-grid .span2 { grid-column: span 1; }
+    .edu-table { font-size: 0.78rem; }
+    .submit-section { padding: 1.2rem; }
+  }
+
+
+  #printArea { background: #fff; }
+  .survey-item { display:flex; flex-direction:column; gap:0.5rem; }
+  .survey-q { font-size:0.83rem; color:var(--text); line-height:1.65; word-break:keep-all; }
+  .survey-num { font-weight:700; color:var(--green-mid); margin-right:0.3rem; }
+  .survey-options {
+    display:flex; flex-wrap:wrap; gap:0.4rem 1.2rem;
+    padding:0.6rem 0.8rem;
+    background:var(--gray-100); border-radius:6px; border:1px solid var(--gray-200);
+  }
+  .survey-options label {
+    display:flex; align-items:center; gap:0.3rem;
+    font-size:0.82rem; color:var(--gray-700); cursor:pointer; white-space:nowrap;
+  }
+  .survey-options input[type=radio] { accent-color:var(--green-mid); width:15px; height:15px; }
+  .survey-textarea {
+    width:100%; min-height:72px; padding:0.6rem 0.8rem;
+    border:1px solid var(--border); border-radius:6px;
+    font-family:inherit; font-size:0.83rem; color:var(--text);
+    background:var(--gray-100); resize:vertical; outline:none; transition:border-color 0.15s;
+  }
+  .survey-textarea:focus { border-color:var(--green-mid); background:#fff; }
+
+  /* ─── 인쇄 ─── */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { border: none; border-radius: 0; box-shadow: none; max-width: 100%; }
+    .btn-submit, .add-row-btn, .btn-clear-sig, .lookup-btn,
+    .submit-section, .sig-status, #sigStatus,
+    .no-print { display: none !important; }
+    .sig-canvas-wrap { border: 1px solid #999; }
+    .section { padding: 1rem 1.8rem; }
+    .header  { padding: 1.2rem 1.8rem; }
+    #printBtn { display: none !important; }
+    .print-only { display: flex !important; }
+  }
+
+  /* 인쇄 완료 오버레이 */
+  #printOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  #printOverlay.show { display: flex; }
+  .print-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem 2.5rem;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .print-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--green-dark); }
+  .print-card p  { font-size: 0.85rem; color: var(--gray-700); margin-bottom: 1.4rem; line-height: 1.6; }
+  .btn-print {
+    width: 100%;
+    height: 46px;
+    background: var(--green-dark);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 0.6rem;
+  }
+  .btn-print:hover { background: var(--green-mid); }
+  .btn-skip {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    font-size: 0.82rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+</style>
+</head>
+<body>
+<div id="printOverlay">
+  <div class="print-card">
+    <h3>✅ 신청이 완료되었습니다</h3>
+    <p>신청 내용이 접수되었습니다.<br>아래 버튼을 눌러 신청서를 PDF로 저장하세요.<br><small style="color:var(--gray-400);">인쇄 창에서 대상을 <strong>"PDF로 저장"</strong>으로 선택하세요.</small></p>
+    <button class="btn-print" onclick="doPrint()">🖨️ PDF로 저장</button>
+    <br>
+    <button class="btn-skip" onclick="document.getElementById('printOverlay').classList.remove('show')">건너뛰기</button>
+  </div>
+</div>
+
+<div class="page">
+  <div id="printArea">
+
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-dot">
+        <svg viewBox="0 0 16 16"><path d="M8 2C5.5 2 3 4 3 7c0 2.5 2 4.5 4 5.5V14h2v-1.5C11 11.5 13 9.5 13 7c0-3-2.5-5-5-5z"/></svg>
+      </div>
+      <span class="logo-name">YONAM COLLEGE · 연암대학교</span>
+    </div>
+    <div class="header-badge">그린바이오 첨단분야 혁신융합대학</div>
+    <h1>학점인정 신청서</h1>
+    <p class="header-sub">Credit Recognition Application · Green Bio Convergence University Program</p>
+  </div>
+
+  <!-- 1. 기본 인적사항 -->
+  <div class="section">
+    <div class="section-title">신청인 정보</div>
+    <div class="info-grid">
+      <div class="field">
+        <label>계열 / 학과</label>
+        <select id="dept" onchange="updateMajor()">
+          <option value="">선택해 주세요</option>
+          <option value="스마트축산계열">스마트축산계열</option>
+          <option value="스마트축산학과">스마트축산학과</option>
+          <option value="스마트원예계열">스마트원예계열</option>
+          <option value="스마트원예학과">스마트원예학과</option>
+          <option value="동물보호계열">동물보호계열</option>
+          <option value="동물보호학과">동물보호학과</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>전 공</label>
+        <select id="major" disabled>
+          <option value="">계열/학과를 먼저 선택해 주세요</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>학 년</label>
+        <select id="grade">
+          <option value="">선택</option>
+          <option>1학년</option>
+          <option>2학년</option>
+          <option>3학년</option>
+          <option>4학년</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>연 락 처</label>
+        <input type="tel" id="phone" placeholder="010-0000-0000" maxlength="13" oninput="formatPhone(this)">
+      </div>
+      <div class="field">
+        <label>학 번</label>
+        <input type="text" id="studentId" placeholder="학번 입력">
+      </div>
+      <div class="field">
+        <label>성 명</label>
+        <input type="text" id="name" placeholder="홍길동">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 교육 이수 사항 -->
+  <div class="section">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem;">
+      <div class="section-title" style="margin-bottom:0; flex:1;">교육 이수 사항</div>
+      <a href="https://script.google.com/macros/s/AKfycbxF_Svw-Fn2-XUeRNHIPO53KhfWS5lXVYhGGmFEUYp3OjZt1TKrPcf1xUyxrPjEwxPE/exec?mode=student"
+         target="_blank" rel="noopener noreferrer" class="lookup-btn">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        나의 이수 현황 조회
+      </a>
+    </div>
+    <div class="edu-table-wrap">
+    <table class="edu-table">
+      <thead>
+        <tr>
+          <th style="width:28px; white-space:normal; word-break:keep-all;">No.</th>
+          <th style="width:44px">학년도</th>
+          <th style="width:36px">학기</th>
+          <th style="width:60px">운영대학</th>
+          <th style="width:170px">교과목명</th>
+          <th style="width:44px">취득<br>학점</th>
+          <th style="width:44px">평가<br>점수</th>
+          <th style="width:44px">평가<br>등급</th>
+        </tr>
+      </thead>
+      <tbody id="eduBody">
+      </tbody>
+    </table>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.7rem;">
+      <button class="add-row-btn" style="margin-top:0;" onclick="addEduRow()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        이수과목 행 추가
+      </button>
+      <button class="add-row-btn" style="margin-top:0; color:#c0392b; border-color:#e8a0a0;" onclick="removeLastEduRow()">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        이수과목 행 삭제
+      </button>
+    </div>
+  </div>
+
+  <!-- 3. 개인정보 동의서 -->
+  <div class="section">
+    <div class="section-title">개인정보 수집·이용 동의</div>
+    <div class="consent-box">
+      <p style="font-size:0.8rem;font-weight:600;margin-bottom:0.6rem;">개인정보 수집·이용 안내</p>
+      <p>연암대학교 그린바이오 혁신융합대학사업단은 귀하의 개인정보를 아래와 같은 목적으로 수집·이용하며, 관련 법령에 따라 안전하게 관리합니다. 본 동의는 학점인정 및 관련 행정 절차의 원활한 진행을 위해 필요하며, 귀하의 동의 없이 개인정보를 수집하거나 이용하지 않습니다.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>수집하는 개인정보 항목</th>
+            <th>개인정보 수집·이용 목적</th>
+            <th>개인정보 보유 및 이용 기간</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>이름, 소속, 학번, 학년, 연락처</td>
+            <td>학사 행정 처리 및 서비스 제공</td>
+            <td>학점인정 관련 업무처리 완료 후<br>그린바이오 혁신융합대학사업 종료 시까지</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="consent-note">※&nbsp;귀하는 개인정보 수집 및 이용에 대한 동의를 거부할 권리가 있습니다. 다만, 동의를 거부할 경우 학점인정 및 관련 서비스 제공에 제한이 있을 수 있습니다.</p>
+      <div class="consent-check">
+        <label><input type="radio" name="consent" value="agree" id="consentYes"> 동의합니다</label>
+        <label><input type="radio" name="consent" value="disagree"> 동의하지 않습니다</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 서약서 -->
+  <div class="section">
+    <div class="section-title">서약서</div>
+    <p class="pledge-text">
+      위 본인은 학점인정운영 시행세칙에 의거하여 학점인정을 받고자 신청합니다.<br>
+      기재된 내용은 모두 사실이며, 사실과 다를 경우 학점인정 취소 등을 포함한 모든 불이익을 감수할 것을 서약합니다.
+    </p>
+
+    <!-- 날짜: 섹션 가운데, 텍스트 오른쪽 정렬 -->
+    <div style="display:flex; justify-content:center; margin:1.4rem 0;">
+      <div style="display:flex; align-items:center; gap:0.4rem; font-size:0.95rem; font-weight:500; color:var(--text);">
+        <input type="text" id="year" value="2026" maxlength="4"
+          style="width:52px; border:none; border-bottom:1.5px solid var(--border); background:transparent;
+                 font-family:inherit; font-size:0.95rem; font-weight:500; text-align:center; outline:none; padding:2px 0; color:var(--text);">
+        <span>년</span>
+        <input type="text" id="month" placeholder="월" maxlength="2"
+          style="width:32px; border:none; border-bottom:1.5px solid var(--border); background:transparent;
+                 font-family:inherit; font-size:0.95rem; font-weight:500; text-align:center; outline:none; padding:2px 0; color:var(--text);">
+        <span>월</span>
+        <input type="text" id="day" placeholder="일" maxlength="2"
+          style="width:32px; border:none; border-bottom:1.5px solid var(--border); background:transparent;
+                 font-family:inherit; font-size:0.95rem; font-weight:500; text-align:center; outline:none; padding:2px 0; color:var(--text);">
+        <span>일</span>
+      </div>
+    </div>
+
+    <!-- 신청인 이름 + 전자서명 1:1 가로 배치 -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; margin-top:0.5rem;">
+
+      <!-- 신청인 -->
+      <div style="border:1px solid var(--gray-200); border-radius:6px; padding:0.7rem 1rem; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.4rem; background:var(--gray-100); height:100px;">
+        <span style="font-size:0.7rem; font-weight:600; color:var(--gray-400); letter-spacing:0.06em;">신청인</span>
+        <span class="pledge-name" id="pledgeName" style="font-size:1rem; font-weight:600; color:var(--text);">—</span>
+      </div>
+
+      <!-- 전자서명 -->
+      <div style="border:1px solid var(--gray-200); border-radius:6px; padding:0.5rem 0.7rem; display:flex; flex-direction:column; gap:0.3rem; height:100px;">
+        <span style="font-size:0.7rem; font-weight:600; color:var(--gray-400); letter-spacing:0.06em; text-align:center; display:block;">서명</span>
+        <div class="sig-canvas-wrap" style="flex:1;">
+          <canvas id="sigCanvas"></canvas>
+          <div class="sig-placeholder" id="sigPlaceholder">전자서명</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 서명 지우기 -->
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem;">
+      <span class="sig-status" id="sigStatus"></span>
+      <button class="btn-clear-sig" onclick="clearSig()">서명 지우기</button>
+    </div>
+
+    <div style="margin-top:1.4rem;padding-top:1rem;border-top:1px solid var(--gray-200);">
+      <p style="font-size:1.15rem;color:var(--gray-700);font-weight:700;text-align:left;">
+        연암대학교 그린바이오 혁신융합대학사업단장 귀하
+      </p>
+    </div>
+  </div>
+
+  <!-- 5. 유의사항 -->
+  <div class="section" style="background:var(--gray-100);">
+    <div class="section-title">유의사항</div>
+    <ol class="notice-list">
+      <li data-n="1.">연암대학교 학점인정운영 시행세칙에 의거하여 타 대학에서 이수한 사항에 대하여 학점인정의 적절성이 인정되는 경우 학점을 인정받을 수 있습니다.</li>
+      <li data-n="2.">신청 학점은 학점인정위원회 및 학점인정심의위원회의 학점인정 적절성 평가에 따라 일부만 인정되거나 불인정될 수 있습니다.</li>
+      <li data-n="3.">정규 수업 외(COSS, 충남RISE 등) 학점은 <strong>전체 졸업학점의 1/2 이내까지만 인정</strong>됩니다.
+        <p class="notice-sub">※ 「학점인정 및 취득에 관한 규정」에 따라 인정범위를 초과할 경우, 학점인정이 불가합니다.</p>
+      </li>
+      <li data-n="4.">학점인정 신청서를 <strong>제출하지 않을 경우, 학점취득(학점인정) 의사가 없는 것으로 간주</strong>합니다.</li>
+      <li data-n="5."><strong>제출기간 이후에는 추후 학점인정 신청 및 소급 인정이 불가</strong>하므로, 반드시 기한 내 신청 바랍니다.</li>
+    </ol>
+  </div>
+
+  <!-- 만족도 조사 -->
+  </div><!-- #printArea 종료 -->
+  <div class="section">
+    <div class="section-title">교과목 만족도 조사</div>
+
+    <!-- 안내문 -->
+    <div style="background:var(--green-light); border-radius:6px; padding:1rem 1.2rem; margin-bottom:1.2rem; font-size:0.8rem; line-height:1.8; color:var(--gray-700); word-break:keep-all;">
+      <p style="margin-bottom:0.5rem;">안녕하세요? 연암대학교 그린바이오 혁신융합대학사업단입니다.</p>
+      <p style="margin-bottom:0.5rem;">본 사업단은 고도화되는 신기술·신산업을 토대로 대학 간 상호 공유와 협력을 통해 미래 인재를 양성하는 새로운 고등교육 체제 구축을 위해 『첨단분야 혁신융합대학사업』을 수행하고 있습니다.</p>
+      <p style="margin-bottom:0.5rem;">본 설문은 향후 본 사업단의 첨단분야 기반 혁신융합대학 모델 구축을 위한 기초자료로 활용하기 위해 기획되었습니다. 설문 내용에는 정답이 없으며, 귀하의 응답내용은 통계법 제13조에 의해 절대적으로 비밀이 보장됩니다.</p>
+      <p>소중한 시간을 허락해 주셔서 진심으로 감사드립니다.</p>
+    </div>
+
+    <!-- 개인정보 수집 동의 -->
+    <div style="border:1px solid var(--gray-200); border-radius:6px; padding:1rem; margin-bottom:1.2rem; font-size:0.77rem; line-height:1.75; color:var(--gray-700); word-break:keep-all; background:var(--gray-100);">
+      <p style="font-weight:700; color:var(--green-dark); margin-bottom:0.6rem;">개인정보 수집·이용 동의</p>
+      <p style="margin-bottom:0.4rem;"><strong>가. 개인정보 수집·이용 목적</strong><br>
+      그린바이오 혁신융합대학사업단에서 수집되는 개인정보는 첨단분야 혁신융합대학사업 만족도 조사를 목적으로 합니다.</p>
+      <p style="margin-bottom:0.4rem;"><strong>나. 개인정보 수집 항목</strong><br>
+      이름, 학번, 학과, 학년</p>
+      <p style="margin-bottom:0.4rem;"><strong>다. 개인정보의 보유·이용 기간</strong><br>
+      수집한 개인정보는 수집 및 이용 목적이 달성된 후 지체없이 파기합니다.</p>
+      <p style="margin-bottom:0.4rem;"><strong>라. 개인정보 수집·이용에 대한 동의 거부</strong><br>
+      정보주체는 개인정보 수집·이용의 동의를 거부할 권리가 있습니다. 단, 동의하지 않을 경우 본 조사에 참여하실 수 없습니다.</p>
+      <div style="display:flex; align-items:center; gap:1.5rem; margin-top:0.8rem;">
+        <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; font-weight:600; cursor:pointer;">
+          <input type="radio" name="surveyConsent" value="agree" style="accent-color:var(--green-mid); width:15px; height:15px;"> 동의합니다
+        </label>
+        <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; font-weight:600; cursor:pointer;">
+          <input type="radio" name="surveyConsent" value="disagree" style="accent-color:var(--green-mid); width:15px; height:15px;"> 동의하지 않습니다
+        </label>
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:1.4rem;">
+      <p style="font-size:0.82rem; font-weight:700; color:var(--green-dark); border-left:3px solid var(--green-accent); padding-left:0.6rem;">첨단분야 교육과정 및 교과목 만족도</p>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">1.</span> 사업단에서 개발한 그린바이오 교과목이 학생 수준에 맞게 체계적으로 운영되었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq1" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq1" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq1" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq1" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq1" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">2.</span> 교과목 수강을 통해 그린바이오에 대한 스스로의 역량과 스킬이 늘었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq2" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq2" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq2" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq2" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq2" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">3.</span> 수강한 교과목의 교재 및 강의자료가 체계적으로 준비되었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq3" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq3" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq3" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq3" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq3" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">4.</span> 참여한 교과목은 문제해결형 교육 콘텐츠로 적절하게 구성되었다고 생각하십니까?
+          <span style="font-size:0.73rem; color:var(--gray-400); display:block; margin-top:0.2rem;">* 문제해결형 콘텐츠란 실제 데이터 및 사례 등을 활용하여 학습자가 주도적으로 참여할 수 있는 프로젝트 방식의 학습 콘텐츠를 말함.</span>
+        </p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq4" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq4" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq4" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq4" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq4" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">5.</span> 교과목 및 교육내용이 만족스럽지 못한 점이 있거나 건의사항이 있다면 적어주세요.</p>
+        <textarea id="sq5" class="survey-textarea" placeholder="자유롭게 작성해 주세요. (선택)"></textarea>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">6.</span> 수강한 그린바이오 교과목의 담당교원 전문성에 대해 전반적으로 만족하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq6" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq6" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq6" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq6" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq6" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">7.</span> 그린바이오 교과목에는 외부 전문가 등 다양한 교수자가 참여하였다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq7" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq7" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq7" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq7" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq7" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">8.</span> 그린바이오 교육과정 참여 확대를 위한 동기부여 등 유인제도가 충분하였다고 생각하십니까?
+          <span style="font-size:0.73rem; color:var(--gray-400); display:block; margin-top:0.2rem;">* 예시: 취·창업 및 진로 지원, 이수 인증, 자격증 취득 지원, 타 프로그램 선발 가점 부여, 교육 기자재 지원 등</span>
+        </p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq8" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq8" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq8" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq8" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq8" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">9.</span> 그린바이오 교육과정 및 교과목에 참여하는 과정에서 교육환경(시설, 기자재 등)에 만족하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq9" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq9" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq9" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq9" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq9" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">10.</span> 교수자, 학생참여유인, 교육환경 등이 만족스럽지 못한 점이 있거나 건의사항이 있다면 적어주세요.</p>
+        <textarea id="sq10" class="survey-textarea" placeholder="자유롭게 작성해 주세요. (선택)"></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 제출 -->
+  <div class="submit-section">
+    <button class="btn-submit" id="submitBtn" onclick="submitForm()">신청서 제출</button>
+    <div class="status-msg" id="statusMsg"></div>
+    <p style="font-size:0.74rem;color:var(--gray-400);text-align:center;">제출 전 모든 항목과 서명을 확인해 주세요</p>
+  </div>
+
+</div><!-- .page -->
+
+<script>
+/* ─── 전공 드롭다운 연동 ─── */
+const majorMap = {
+  '스마트축산계열': ['낙농한우전공','양돈양계전공','축산전공','축산산업전공','계열(학부)공통'],
+  '스마트축산학과': ['계열(학부)공통'],
+  '스마트원예계열': ['스마트팜전공','원예전공','환경조경전공','플로리스트리전공','가드닝전공','스마트팜전공(융합)','스마트원예산업전공','계열(학부)공통'],
+  '스마트원예학과': ['계열(학부)공통'],
+  '동물보호계열':  ['동물보호전공','반려동물전공','동물보건학과','반려동물학과','계열(학부)공통'],
+  '동물보호학과':  ['계열(학부)공통'],
+};
+
+function updateMajor() {
+  const dept    = document.getElementById('dept').value;
+  const majorSel = document.getElementById('major');
+  majorSel.innerHTML = '';
+  if (!dept) {
+    majorSel.innerHTML = '<option value="">계열/학과를 먼저 선택해 주세요</option>';
+    majorSel.disabled = true;
+    return;
+  }
+  const opts = majorMap[dept] || [];
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '전공 선택';
+  majorSel.appendChild(placeholder);
+  opts.forEach(m => {
+    const o = document.createElement('option');
+    o.value = m; o.textContent = m;
+    majorSel.appendChild(o);
+  });
+  majorSel.disabled = false;
+  if (opts.length === 1) majorSel.value = opts[0];
+}
+
+/* ─── 연락처 자동 하이픈 ─── */
+function formatPhone(el) {
+  let v = el.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length <= 3)       el.value = v;
+  else if (v.length <= 7)  el.value = v.slice(0,3) + '-' + v.slice(3);
+  else                     el.value = v.slice(0,3) + '-' + v.slice(3,7) + '-' + v.slice(7);
+}
+
+/* ─── 성명 → 서약서 이름 연동 ─── */
+document.getElementById('name').addEventListener('input', function() {
+  const pn = document.getElementById('pledgeName');
+  pn.textContent = this.value.trim() || '—';
+});
+
+/* ─── 이수사항 행 추가 ─── */
+let rowCount = 0;
+/* ─── 교과목 데이터 ─── */
+const SUBJECT_DATA = [
+  { name:'그린바이오현미경개론', univ:'서울대학교', credits:'3' },
+  { name:'식품생산과학입문', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오생명공학개론', univ:'서울대학교', credits:'3' },
+  { name:'그린바이오소재개론', univ:'전남대학교', credits:'3' },
+  { name:'바이오세라피개론', univ:'충남대학교', credits:'3' },
+  { name:'식물분자생물학개론', univ:'전남대학교', credits:'3' },
+  { name:'식물병원미생물학', univ:'서울대학교', credits:'3' },
+  { name:'의공학기초와입문', univ:'전남대학교', credits:'3' },
+  { name:'품종개량·식물유전자의비밀', univ:'충남대학교', credits:'3' },
+  { name:'바이오신기술', univ:'충남대학교', credits:'3' },
+  { name:'AI바이오프로그래밍', univ:'경희대학교', credits:'3' },
+  { name:'그린바이오현장실습', univ:'충남대학교', credits:'2' },
+  { name:'의생명소재활용의기초', univ:'경희대학교', credits:'3' },
+  { name:'천연물소재응용의기초', univ:'경희대학교', credits:'3' },
+  { name:'표현체데이터분석활용', univ:'경희대학교', credits:'3' },
+  { name:'생명정보로보는미생물', univ:'경희대학교', credits:'3' },
+  { name:'컴퓨터로보는식물생명공학', univ:'충남대학교', credits:'3' },
+  { name:'바이오신기술활용', univ:'충남대학교', credits:'3' },
+  { name:'농생명데이터활용', univ:'충남대학교', credits:'3' },
+  { name:'다물리환경시뮬레이션', univ:'서울대학교', credits:'3' },
+  { name:'다중오믹스및NGS분석', univ:'충남대학교', credits:'3' },
+  { name:'세포농업과오가노이드플랫폼', univ:'충남대학교', credits:'3' },
+  { name:'진환경고분자개론', univ:'서울대학교', credits:'3' },
+  { name:'농업용빅데이터분석의기초', univ:'경희대학교', credits:'3' },
+  { name:'그린생산시스템과산업이해', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오식품생산', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오시스템개론', univ:'전남대학교', credits:'3' },
+  { name:'로봇공학입문', univ:'전남대학교', credits:'3' },
+  { name:'첨단농업기계공학의기초', univ:'충남대학교', credits:'3' },
+  { name:'스마트식품가공시스템', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오비즈니스', univ:'서울대학교', credits:'3' },
+  { name:'친환경고분자공정', univ:'서울대학교', credits:'3' },
+  { name:'식품의혁신·푸드테크', univ:'경희대학교', credits:'3' },
+  { name:'그린바이오신소재학', univ:'전남대학교', credits:'3' },
+  { name:'스마트저장유통기술', univ:'충남대학교', credits:'3' },
+  { name:'유전자조작기술·먹거리부터의약품까지', univ:'경희대학교', credits:'3' },
+  { name:'미래농림축산식품과학활용및실습', univ:'충남대학교', credits:'3' },
+  { name:'구조기반식품단백질공학', univ:'서울대학교', credits:'3' },
+  { name:'그린바이오회화치유정원', univ:'충남대학교', credits:'3' },
+  { name:'식품대사체학', univ:'서울대학교', credits:'3' },
+  { name:'식품마이크로바이옴학', univ:'서울대학교', credits:'3' },
+  { name:'푸드테크학', univ:'서울대학교', credits:'3' },
+  { name:'농업로봇공학', univ:'서울대학교', credits:'3' },
+  { name:'스마트산림방식학', univ:'서울대학교', credits:'3' },
+  { name:'그린포레스트자원학', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오산업과가치창출', univ:'충남대학교', credits:'3' },
+  { name:'목재물리역학개론', univ:'서울대학교', credits:'3' },
+  { name:'기후변화와농업정책', univ:'충남대학교', credits:'3' },
+  { name:'생물자원에너지학개론', univ:'전남대학교', credits:'3' },
+  { name:'식물과기후변화', univ:'경희대학교', credits:'3' },
+  { name:'식생원탐사', univ:'경희대학교', credits:'3' },
+  { name:'셀룰로오스화학소재기술', univ:'충남대학교', credits:'3' },
+  { name:'작물정보보계측', univ:'서울대학교', credits:'3' },
+  { name:'기후변화대응그린인프라설계', univ:'서울대학교', credits:'3' },
+  { name:'식물·환경미생물학', univ:'충남대학교', credits:'3' },
+  { name:'기후변화산림생태계영향평가', univ:'서울대학교', credits:'3' },
+  { name:'자원순환과농업비즈니스', univ:'충남대학교', credits:'3' },
+  { name:'생태산업경제', univ:'충남대학교', credits:'3' },
+  { name:'목질계바이오매스전환기술', univ:'충남대학교', credits:'3' },
+  { name:'원격탐사와생태계관리', univ:'서울대학교', credits:'3' },
+  { name:'그린바이오캡스프로젝트', univ:'충남대학교', credits:'3' },
+  { name:'기후변화적응계획', univ:'충남대학교', credits:'3' },
+  { name:'훼손산림생태계복원및관리', univ:'서울대학교', credits:'3' },
+  { name:'지역환경보전공학', univ:'충남대학교', credits:'3' },
+  { name:'동물세포공학입문', univ:'서울대학교', credits:'3' },
+  { name:'그린바이오지속가능축산', univ:'충남대학교', credits:'3' },
+  { name:'스마트낙농유가공및유산균과학', univ:'서울대학교', credits:'3' },
+  { name:'농장동물행동복지와스트레스', univ:'충남대학교', credits:'3' },
+  { name:'경제동물과반려동물학', univ:'충남대학교', credits:'3' },
+  { name:'식물모델링및시뮬레이션', univ:'서울대학교', credits:'3' },
+  { name:'친환경농업현장관리기술', univ:'충남대학교', credits:'3' },
+  { name:'디지털그린바이오시스템라이기술탐색', univ:'충남대학교', credits:'3' },
+  { name:'디지털그린바이오시스템연수', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오진로설계', univ:'충남대학교', credits:'3' },
+  { name:'첨단기술과융합사고', univ:'충남대학교', credits:'1' },
+  { name:'첨단기술과융합사고(심화)', univ:'충남대학교', credits:'1' },
+  { name:'디지털그린바이오소재미래기술탐색', univ:'충남대학교', credits:'3' },
+  { name:'디지털그린바이오소재연수', univ:'충남대학교', credits:'3' },
+  { name:'그린바이오진로설계(심화)', univ:'충남대학교', credits:'3' },
+];
+
+/* ─── 이수시기 옵션 생성 ─── */
+/* ─── 교과목 옵션 생성 ─── */
+function buildSubjectOptions() {
+  if (SUBJECT_DATA.length === 0) {
+    return `<option value="">교과목명 선택</option>`;
+  }
+  return `<option value="">교과목명 선택</option>` +
+    SUBJECT_DATA.map(s => `<option value="${s.name}">${s.name}</option>`).join('');
+}
+
+/* ─── 점수 → 등급 자동 변환 ─── */
+function scoreToGrade(score) {
+  const s = parseFloat(score);
+  if (isNaN(s)) return '';
+  if (s >= 95)  return 'A+';
+  if (s >= 90)  return 'A';
+  if (s >= 85)  return 'B+';
+  if (s >= 80)  return 'B';
+  if (s >= 75)  return 'C+';
+  if (s >= 70)  return 'C';
+  if (s >= 65)  return 'D+';
+  if (s >= 60)  return 'D';
+  return 'F';
+}
+
+/* ─── 교과목 선택 시 자동 연동 ─── */
+function onSubjectChange(sel) {
+  const tr = sel.closest('tr');
+  const univCell   = tr.querySelector('.auto-univ');
+  const creditCell = tr.querySelector('.auto-credits');
+  const gradeInput = tr.querySelector('.grade-input-auto');
+  const found = SUBJECT_DATA.find(s => s.name === sel.value);
+  univCell.value   = found ? found.univ    : '';
+  creditCell.value = found ? found.credits : '';
+  // 서울대 여부에 따라 등급란 제어
+  updateGradeField(tr, univCell.value);
+}
+
+function updateGradeField(tr, univ) {
+  const gradeInput = tr.querySelector('.grade-input-auto');
+  if (!gradeInput) return;
+  const isSNU = univ === '서울대학교';
+  if (isSNU) {
+    gradeInput.readOnly = false;
+    gradeInput.style.background = '';
+    gradeInput.style.color = '';
+    gradeInput.placeholder = '직접 입력';
+  } else {
+    gradeInput.readOnly = true;
+    gradeInput.style.background = 'var(--gray-100)';
+    gradeInput.style.color = 'var(--gray-700)';
+    gradeInput.placeholder = '-';
+  }
+}
+
+function onScoreInput(input) {
+  const tr = input.closest('tr');
+  const univ = tr.querySelector('.auto-univ')?.value || '';
+  const gradeInput = tr.querySelector('.grade-input-auto');
+  if (!gradeInput) return;
+  // 서울대는 수기 입력이므로 자동 계산 안 함
+  if (univ === '서울대학교') return;
+  gradeInput.value = scoreToGrade(input.value);
+}
+
+/* ─── 행 추가 ─── */
+function addEduRow() {
+  rowCount++;
+  const tbody = document.getElementById('eduBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="row-num">${rowCount}</td>
+    <td>
+      <select class="td-select year-input">
+        <option value="">연도</option>
+        <option>2024</option>
+        <option>2025</option>
+        <option>2026</option>
+        <option>2027</option>
+      </select>
+    </td>
+    <td>
+      <select class="td-select semester-input">
+        <option value="">학기</option>
+        <option>1</option>
+        <option>하계</option>
+        <option>2</option>
+        <option>동계</option>
+      </select>
+    </td>
+    <td><input type="text" class="auto-univ" placeholder="자동 입력" readonly></td>
+    <td><select class="td-select" onchange="onSubjectChange(this)">${buildSubjectOptions()}</select></td>
+    <td><input type="text" class="auto-credits grade-input" placeholder="-" readonly></td>
+    <td><input type="text" class="grade-input score-input" placeholder="점수" oninput="onScoreInput(this)"></td>
+    <td><input type="text" class="grade-input grade-input-auto" placeholder="-" readonly style="background:var(--gray-100);color:var(--gray-700);"></td>
+  `;
+  tbody.appendChild(tr);
+}
+// 초기 2행 자동 생성
+for(let i = 0; i < 2; i++) addEduRow();
+
+function removeLastEduRow() {
+  const tbody = document.getElementById('eduBody');
+  if (tbody.rows.length > 1) {
+    tbody.deleteRow(tbody.rows.length - 1);
+    rowCount--;
+  } else if (tbody.rows.length === 1) {
+    // 마지막 1행은 삭제 대신 내용만 초기화
+    const row = tbody.rows[0];
+    row.querySelectorAll('input').forEach(i => i.value = '');
+    row.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  }
+}
+
+/* ─── 전자서명 캔버스 ─── */
+const canvas = document.getElementById('sigCanvas');
+const ctx = canvas.getContext('2d');
+let hasSig = false;
+
+function resizeCanvas() {
+  const wrap = canvas.parentElement;
+  canvas.width  = wrap.offsetWidth;
+  canvas.height = wrap.offsetHeight || 52;
+}
+resizeCanvas();
+window.addEventListener('resize', () => { resizeCanvas(); clearSig(true); });
+
+ctx.lineWidth   = 2.4;
+ctx.lineCap     = 'round';
+ctx.lineJoin    = 'round';
+ctx.strokeStyle = '#1c2420';
+
+let drawing = false;
+let lastX = 0, lastY = 0;
+
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const scaleX = canvas.width  / r.width;
+  const scaleY = canvas.height / r.height;
+  const src = e.touches ? e.touches[0] : e;
+  return { x: (src.clientX - r.left) * scaleX, y: (src.clientY - r.top) * scaleY };
+}
+
+canvas.addEventListener('mousedown', e => {
+  drawing = true;
+  const p = getPos(e);
+  lastX = p.x; lastY = p.y;
+  ctx.beginPath(); ctx.moveTo(p.x, p.y);
+});
+canvas.addEventListener('mousemove', e => {
+  if (!drawing) return;
+  const p = getPos(e);
+  ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+  lastX = p.x; lastY = p.y;
+  onSigDrawn();
+});
+canvas.addEventListener('mouseup',    () => drawing = false);
+canvas.addEventListener('mouseleave', () => drawing = false);
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  drawing = true;
+  const p = getPos(e);
+  lastX = p.x; lastY = p.y;
+  ctx.beginPath(); ctx.moveTo(p.x, p.y);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!drawing) return;
+  const p = getPos(e);
+  ctx.lineTo(p.x, p.y);
+  ctx.stroke();
+  onSigDrawn();
+}, { passive: false });
+canvas.addEventListener('touchend',   () => drawing = false);
+
+function onSigDrawn() {
+  if (!hasSig) {
+    hasSig = true;
+    document.getElementById('sigPlaceholder').style.opacity = '0';
+    document.getElementById('sigStatus').textContent = '서명이 입력되었습니다 ✓';
+  }
+}
+
+function clearSig(silent) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hasSig = false;
+  document.getElementById('sigPlaceholder').style.opacity = '0.25';
+  if (!silent) {
+    document.getElementById('sigStatus').textContent = '';
+  }
+}
+
+/* ─── 유효성 검사 ─── */
+function validateForm() {
+  const errors = [];
+  if (!document.getElementById('dept').value.trim())      errors.push('계열/학과');
+  if (!document.getElementById('studentId').value.trim()) errors.push('학번');
+  if (!document.getElementById('name').value.trim())      errors.push('성명');
+  if (!document.getElementById('phone').value.trim())     errors.push('연락처');
+  if (!document.querySelector('input[name="consent"]:checked')) errors.push('개인정보 동의');
+  if (!document.getElementById('month').value)            errors.push('제출 월');
+  if (!document.getElementById('day').value)              errors.push('제출 일');
+  if (!hasSig) errors.push('전자서명');
+
+  // 만족도 조사 선택형 필수 문항
+  if (!document.querySelector('input[name="surveyConsent"]:checked')) errors.push('만족도조사 개인정보 동의');
+  const surveyRequired = [
+    ['sq1','Q1(교과목 체계성)'], ['sq2','Q2(역량 향상)'], ['sq3','Q3(교재 준비)'],
+    ['sq4','Q4(문제해결형 콘텐츠)'], ['sq6','Q6(교수자 전문성)'],
+    ['sq7','Q7(다양한 교수자)'], ['sq8','Q8(참여유인제도)'], ['sq9','Q9(교육환경)']
+  ];
+  surveyRequired.forEach(([name, label]) => {
+    if (!document.querySelector(`input[name="${name}"]:checked`)) errors.push(label);
+  });
+
+  // 이수사항 최소 1행
+  const rows = document.querySelectorAll('#eduBody tr');
+  let hasEdu = false;
+  rows.forEach(tr => {
+    if (tr.querySelector('.year-input')?.value || tr.querySelector('.semester-input')?.value) hasEdu = true;
+  });
+  if (!hasEdu) errors.push('교육 이수 사항(최소 1행)');
+
+  return errors;
+}
+
+/* ─── 제출 ─── */
+async function submitForm() {
+  const errors = validateForm();
+  const statusEl = document.getElementById('statusMsg');
+
+  if (errors.length > 0) {
+    statusEl.textContent = '누락 항목: ' + errors.join(', ');
+    statusEl.className = 'status-msg error';
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  statusEl.textContent = '⏳ 데이터 수집 중...';
+  statusEl.className = 'status-msg';
+
+  // 서명 이미지 추출 및 고정
+  const sigDataUrl = canvas.toDataURL('image/png');
+  const sigImg = document.createElement('img');
+  sigImg.src = sigDataUrl;
+  sigImg.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+  canvas.parentElement.insertBefore(sigImg, canvas);
+  canvas.style.display = 'none';
+
+  // 이수 데이터 수집
+  const eduData = [];
+  document.querySelectorAll('#eduBody tr').forEach((tr, i) => {
+    const year     = tr.querySelector('.year-input')?.value    || '';
+    const semester = tr.querySelector('.semester-input')?.value || '';
+    const period   = year && semester ? `${year}-${semester}` : (year || semester);
+    const univ     = tr.querySelector('.auto-univ')?.value     || '';
+    const subject  = tr.querySelector('.td-select')?.value     || '';
+    const credits  = tr.querySelector('.auto-credits')?.value  || '';
+    const inputs   = tr.querySelectorAll('.grade-input:not(.auto-credits)');
+    const score    = inputs[0]?.value || '';
+    const grade    = inputs[1]?.value || '';
+    if (period || subject) {
+      eduData.push({ no: i+1, period, univ, subject, credits, score, grade });
+    }
+  });
+
+  const payload = {
+    dept:      document.getElementById('dept').value.trim(),
+    major:     document.getElementById('major').value.trim(),
+    grade:     document.getElementById('grade').value,
+    studentId: document.getElementById('studentId').value.trim(),
+    name:      document.getElementById('name').value.trim(),
+    phone:     document.getElementById('phone').value.trim(),
+    consent:   document.querySelector('input[name="consent"]:checked').value,
+    year:      document.getElementById('year').value,
+    month:     document.getElementById('month').value,
+    day:       document.getElementById('day').value,
+    eduData:   JSON.stringify(eduData),
+    signature: sigDataUrl,
+    sq1:  document.querySelector('input[name="sq1"]:checked')?.value  || '',
+    sq2:  document.querySelector('input[name="sq2"]:checked')?.value  || '',
+    sq3:  document.querySelector('input[name="sq3"]:checked')?.value  || '',
+    sq4:  document.querySelector('input[name="sq4"]:checked')?.value  || '',
+    sq5:  document.getElementById('sq5')?.value  || '',
+    sq6:  document.querySelector('input[name="sq6"]:checked')?.value  || '',
+    sq7:  document.querySelector('input[name="sq7"]:checked')?.value  || '',
+    sq8:  document.querySelector('input[name="sq8"]:checked')?.value  || '',
+    sq9:  document.querySelector('input[name="sq9"]:checked')?.value  || '',
+    sq10: document.getElementById('sq10')?.value || '',
+    surveyConsent: document.querySelector('input[name="surveyConsent"]:checked')?.value || '',
+  };
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9QhhUUfNPH9CZJwE_B0h7tybViyja1dAbyL_qGRLRi6gB4iu0UiQOpOHqZWKLmleX/exec";
+
+  try {
+    // ── PDF 생성 ──
+    statusEl.textContent = '⏳ PDF 생성 중...';
+    const pageEl = document.getElementById('printArea');
+
+    // 인쇄 불필요 요소 임시 숨김
+    const hideEls = document.querySelectorAll('.submit-section, .add-row-btn, .btn-clear-sig, .lookup-btn, #sigStatus, .sig-status');
+    hideEls.forEach(el => el.style.setProperty('display','none','important'));
+
+    // input/select를 div로 교체 (세로 정렬 보정)
+    const replacedEls = [];
+    pageEl.querySelectorAll('input:not([type=radio]):not([type=file]), select').forEach(el => {
+      const val = el.tagName === 'SELECT'
+        ? (el.options[el.selectedIndex]?.text || '')
+        : (el.value || el.placeholder || '');
+      const div = document.createElement('div');
+      div.textContent = val;
+      const isEduCell = el.closest('#eduBody') !== null;
+      div.style.cssText = `
+        height: ${el.offsetHeight}px;
+        width: 100%;
+        padding: 0 0.9rem;
+        border: 1px solid var(--border, #d4d4d0);
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: ${getComputedStyle(el).fontSize};
+        color: var(--text, #1a1a1a);
+        background: ${getComputedStyle(el).backgroundColor};
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: ${isEduCell ? 'center' : 'flex-start'};
+        white-space: nowrap;
+        overflow: hidden;
+      `;
+      el.parentNode.insertBefore(div, el);
+      el.style.display = 'none';
+      replacedEls.push({ el, div });
+    });
+
+    // 캡처 전 페이지 너비 고정 (잘림 방지)
+    const origWidth = pageEl.style.width;
+    const origMaxWidth = pageEl.style.maxWidth;
+    pageEl.style.width = '760px';
+    pageEl.style.maxWidth = '760px';
+
+    const cvs = await html2canvas(pageEl, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      windowWidth: 800,
+      width: 760,
+      x: 0
+    });
+
+    // 복원
+    pageEl.style.width = origWidth;
+    pageEl.style.maxWidth = origMaxWidth;
+    replacedEls.forEach(({ el, div }) => {
+      el.style.display = '';
+      div.remove();
+    });
+    hideEls.forEach(el => el.style.removeProperty('display'));
+
+    const imgData = cvs.toDataURL('image/jpeg', 0.95);
+    const { jsPDF } = window.jspdf;
+    const pdf  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pdfW = pdf.internal.pageSize.getWidth();
+    const pdfH = pdf.internal.pageSize.getHeight();
+    const imgH = pdfW * (cvs.height / cvs.width);
+
+    if (imgH <= pdfH) {
+      pdf.addImage(imgData, 'JPEG', 0, 0, pdfW, imgH);
+    } else {
+      let posY = 0;
+      while (posY < imgH) {
+        if (posY > 0) pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, -posY, pdfW, imgH);
+        posY += pdfH;
+      }
+    }
+
+    const pdfBase64 = pdf.output('datauristring').split(',')[1];
+
+    // ── Drive 저장 ──
+    statusEl.textContent = '⏳ 드라이브 저장 중...';
+    payload.pdfBase64 = pdfBase64;
+
+    const res  = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const json = await res.json();
+
+    if (json.success) {
+      statusEl.textContent = '✅ 신청 및 PDF 저장이 완료되었습니다!';
+      statusEl.className = 'status-msg success';
+      btn.textContent = '제출 완료';
+    } else {
+      throw new Error(json.error || '서버 오류');
+    }
+
+  } catch (err) {
+    statusEl.textContent = '❌ 오류: ' + err.message;
+    statusEl.className = 'status-msg error';
+    btn.disabled = false;
+    canvas.style.display = 'block';
+    sigImg.remove();
+  }
+}
+function doPrint() {
+  document.getElementById('printOverlay').classList.remove('show');
+  setTimeout(() => window.print(), 300);
+}
+</script>
+</body>
+</html>
