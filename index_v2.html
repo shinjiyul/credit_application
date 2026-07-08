@@ -569,6 +569,29 @@
     .submit-section { padding: 1.2rem; }
   }
 
+
+  /* ─── 만족도 조사 ─── */
+  .survey-item { display:flex; flex-direction:column; gap:0.5rem; }
+  .survey-q { font-size:0.83rem; color:var(--text); line-height:1.65; word-break:keep-all; }
+  .survey-num { font-weight:700; color:var(--green-mid); margin-right:0.3rem; }
+  .survey-options {
+    display:flex; flex-wrap:wrap; gap:0.4rem 1.2rem;
+    padding:0.6rem 0.8rem;
+    background:var(--gray-100); border-radius:6px; border:1px solid var(--gray-200);
+  }
+  .survey-options label {
+    display:flex; align-items:center; gap:0.3rem;
+    font-size:0.82rem; color:var(--gray-700); cursor:pointer; white-space:nowrap;
+  }
+  .survey-options input[type=radio] { accent-color:var(--green-mid); width:15px; height:15px; }
+  .survey-textarea {
+    width:100%; min-height:72px; padding:0.6rem 0.8rem;
+    border:1px solid var(--border); border-radius:6px;
+    font-family:inherit; font-size:0.83rem; color:var(--text);
+    background:var(--gray-100); resize:vertical; outline:none; transition:border-color 0.15s;
+  }
+  .survey-textarea:focus { border-color:var(--green-mid); background:#fff; }
+
   /* ─── 인쇄 ─── */
   @media print {
     body { background: #fff; padding: 0; }
@@ -843,6 +866,121 @@
       <li data-n="4.">학점인정 신청서를 <strong>제출하지 않을 경우, 학점취득(학점인정) 의사가 없는 것으로 간주</strong>합니다.</li>
       <li data-n="5."><strong>제출기간 이후에는 추후 학점인정 신청 및 소급 인정이 불가</strong>하므로, 반드시 기한 내 신청 바랍니다.</li>
     </ol>
+  </div>
+
+  <!-- 만족도 조사 -->
+  <div class="section">
+    <div class="section-title">교과목 만족도 조사</div>
+    <p style="font-size:0.78rem; color:var(--gray-400); margin-bottom:1.2rem; line-height:1.6; word-break:keep-all;">
+      본 설문은 그린바이오 혁신융합대학사업의 교육과정 개선을 위한 기초자료로 활용됩니다.
+      응답 내용은 통계법에 의해 비밀이 보장되며, 정답이 없으니 솔직하게 응답해 주세요.
+    </p>
+    <div style="display:flex; flex-direction:column; gap:1.4rem;">
+      <p style="font-size:0.82rem; font-weight:700; color:var(--green-dark); border-left:3px solid var(--green-accent); padding-left:0.6rem;">B. 첨단분야 교육과정 및 교과목 만족도</p>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">1.</span> 사업단에서 개발한 그린바이오 교과목이 학생 수준에 맞게 체계적으로 운영되었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq1" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq1" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq1" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq1" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq1" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">2.</span> 교과목 수강을 통해 그린바이오에 대한 스스로의 역량과 스킬이 늘었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq2" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq2" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq2" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq2" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq2" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">3.</span> 수강한 교과목의 교재 및 강의자료가 체계적으로 준비되었다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq3" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq3" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq3" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq3" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq3" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">4.</span> 참여한 교과목은 문제해결형 교육 콘텐츠로 적절하게 구성되었다고 생각하십니까?
+          <span style="font-size:0.73rem; color:var(--gray-400); display:block; margin-top:0.2rem;">* 문제해결형 콘텐츠란 실제 데이터 및 사례 등을 활용하여 학습자가 주도적으로 참여할 수 있는 프로젝트 방식의 학습 콘텐츠를 말함.</span>
+        </p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq4" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq4" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq4" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq4" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq4" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">5.</span> 교과목 및 교육내용이 만족스럽지 못한 점이 있거나 건의사항이 있다면 적어주세요.</p>
+        <textarea id="sq5" class="survey-textarea" placeholder="자유롭게 작성해 주세요. (선택)"></textarea>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">6.</span> 수강한 그린바이오 교과목의 담당교원 전문성에 대해 전반적으로 만족하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq6" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq6" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq6" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq6" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq6" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">7.</span> 그린바이오 교과목에는 외부 전문가 등 다양한 교수자가 참여하였다고 생각하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq7" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq7" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq7" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq7" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq7" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">8.</span> 그린바이오 교육과정 참여 확대를 위한 동기부여 등 유인제도가 충분하였다고 생각하십니까?
+          <span style="font-size:0.73rem; color:var(--gray-400); display:block; margin-top:0.2rem;">* 예시: 취·창업 및 진로 지원, 이수 인증, 자격증 취득 지원, 타 프로그램 선발 가점 부여, 교육 기자재 지원 등</span>
+        </p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq8" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq8" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq8" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq8" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq8" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">9.</span> 그린바이오 교육과정 및 교과목에 참여하는 과정에서 교육환경(시설, 기자재 등)에 만족하십니까?</p>
+        <div class="survey-options">
+          <label><input type="radio" name="sq9" value="5"> 매우 그렇다</label>
+          <label><input type="radio" name="sq9" value="4"> 대체로 그렇다</label>
+          <label><input type="radio" name="sq9" value="3"> 보통이다</label>
+          <label><input type="radio" name="sq9" value="2"> 그렇지 않은 편이다</label>
+          <label><input type="radio" name="sq9" value="1"> 전혀 그렇지 않다</label>
+        </div>
+      </div>
+
+      <div class="survey-item">
+        <p class="survey-q"><span class="survey-num">10.</span> 교수자, 학생참여유인, 교육환경 등이 만족스럽지 못한 점이 있거나 건의사항이 있다면 적어주세요.</p>
+        <textarea id="sq10" class="survey-textarea" placeholder="자유롭게 작성해 주세요. (선택)"></textarea>
+      </div>
+
+    </div>
   </div>
 
   <!-- 제출 -->
@@ -1257,7 +1395,17 @@ async function submitForm() {
     month:     document.getElementById('month').value,
     day:       document.getElementById('day').value,
     eduData:   JSON.stringify(eduData),
-    signature: sigDataUrl
+    signature: sigDataUrl,
+    sq1:  document.querySelector('input[name="sq1"]:checked')?.value  || '',
+    sq2:  document.querySelector('input[name="sq2"]:checked')?.value  || '',
+    sq3:  document.querySelector('input[name="sq3"]:checked')?.value  || '',
+    sq4:  document.querySelector('input[name="sq4"]:checked')?.value  || '',
+    sq5:  document.getElementById('sq5')?.value  || '',
+    sq6:  document.querySelector('input[name="sq6"]:checked')?.value  || '',
+    sq7:  document.querySelector('input[name="sq7"]:checked')?.value  || '',
+    sq8:  document.querySelector('input[name="sq8"]:checked')?.value  || '',
+    sq9:  document.querySelector('input[name="sq9"]:checked')?.value  || '',
+    sq10: document.getElementById('sq10')?.value || '',
   };
 
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx9QhhUUfNPH9CZJwE_B0h7tybViyja1dAbyL_qGRLRi6gB4iu0UiQOpOHqZWKLmleX/exec";
