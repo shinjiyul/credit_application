@@ -1359,6 +1359,18 @@ function validateForm() {
   if (!document.getElementById('day').value)              errors.push('제출 일');
   if (!hasSig) errors.push('전자서명');
 
+  // 서울대 교과목 행: 평가점수 또는 평가등급 필수
+  document.querySelectorAll('#eduBody tr').forEach((tr, i) => {
+    const univ = tr.querySelector('.auto-univ')?.value || '';
+    if (univ === '서울대학교') {
+      const score = tr.querySelector('.score-input')?.value.trim() || '';
+      const grade = tr.querySelector('.grade-input-auto')?.value.trim() || '';
+      if (!score && !grade) {
+        errors.push(`이수사항 ${i+1}행 (서울대) 평가점수 또는 평가등급`);
+      }
+    }
+  });
+
   // 만족도 조사 선택형 필수 문항
   if (!document.querySelector('input[name="surveyConsent"]:checked')) errors.push('만족도조사 개인정보 동의');
   const surveyRequired = [
